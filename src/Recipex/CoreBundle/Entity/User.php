@@ -5,6 +5,7 @@ namespace Recipex\CoreBundle\Entity;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -25,6 +26,14 @@ class User extends BaseUser
      * @var string
      * @ORM\Column(type="string")
      * @Groups({ "get", "list" })
+     *
+     * @Assert\NotBlank(message="Please enter your name")
+     * @Assert\Length(
+     *     min=3,
+     *     max=255,
+     *     minMessage="The name is too short",
+     *     maxMessage="The name is too long"
+     * )
      */
     protected $name;
 
