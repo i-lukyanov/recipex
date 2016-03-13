@@ -19,6 +19,7 @@ class AppKernel extends Kernel
             new \FOS\RestBundle\FOSRestBundle(),
             new \FOS\HttpCacheBundle\FOSHttpCacheBundle(),
             new \Nelmio\ApiDocBundle\NelmioApiDocBundle(),
+            new Recipex\CoreBundle\RecipexCoreBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
