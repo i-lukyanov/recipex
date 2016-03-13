@@ -1,2 +1,7 @@
 api_login_check:
     path: /login_check
+
+api_register:
+    path: /register
+    defaults: { _controller: RecipexAuthBundle:Registration:register }
+    methods: [POST]

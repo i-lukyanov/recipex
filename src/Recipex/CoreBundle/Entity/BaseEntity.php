@@ -22,7 +22,7 @@ abstract class BaseEntity
      * @var boolean
      * @ORM\Column(type="boolean", options={ "default": true })
      */
-    protected $isActive = true;
+    protected $enabled = true;
 
     /**
      * @var \DateTime
@@ -48,17 +48,17 @@ abstract class BaseEntity
     /**
      * @return boolean
      */
-    public function getIsActive()
+    public function getEnabled()
     {
-        return $this->isActive;
+        return $this->enabled;
     }
 
     /**
-     * @param boolean $isActive
+     * @param boolean $enabled
      */
-    public function setIsActive($isActive)
+    public function setEnabled($enabled)
     {
-        $this->isActive = $isActive;
+        $this->enabled = $enabled;
     }
 
     /**

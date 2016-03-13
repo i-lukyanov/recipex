@@ -4,10 +4,12 @@ namespace Recipex\CoreBundle\Entity;
 
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="users")
+ * @ORM\HasLifecycleCallbacks()
  */
 class User extends BaseUser
 {
@@ -22,14 +24,24 @@ class User extends BaseUser
     /**
      * @var string
      * @ORM\Column(type="string")
+     * @Groups({ "get", "list" })
      */
     protected $name;
 
     /**
-     * @var boolean
-     * @ORM\Column(type="boolean", options={ "default": true })
+     * @Groups({ "get", "list" })
      */
-    protected $isActive = true;
+    protected $username;
+
+    /**
+     * @Groups({ "get", "list" })
+     */
+    protected $email;
+
+    /**
+     * @Groups({ "get" })
+     */
+    protected $enabled = true;
 
     /**
      * @var \DateTime
@@ -58,22 +70,6 @@ class User extends BaseUser
     public function setName($name)
     {
         $this->name = $name;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function getIsActive()
-    {
-        return $this->isActive;
-    }
-
-    /**
-     * @param boolean $isActive
-     */
-    public function setIsActive($isActive)
-    {
-        $this->isActive = $isActive;
     }
 
     /**
