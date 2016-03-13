@@ -20,6 +20,7 @@ class AppKernel extends Kernel
             // Third-party bundles
             new \FOS\HttpCacheBundle\FOSHttpCacheBundle(),
             new \Nelmio\ApiDocBundle\NelmioApiDocBundle(),
+            new FOS\UserBundle\FOSUserBundle(),
 
             // Application bundles
             new Recipex\CoreBundle\RecipexCoreBundle(),
