@@ -21,9 +21,11 @@ class AppKernel extends Kernel
             new \FOS\HttpCacheBundle\FOSHttpCacheBundle(),
             new \Nelmio\ApiDocBundle\NelmioApiDocBundle(),
             new FOS\UserBundle\FOSUserBundle(),
+            new Lexik\Bundle\JWTAuthenticationBundle\LexikJWTAuthenticationBundle(),
 
             // Application bundles
             new Recipex\CoreBundle\RecipexCoreBundle(),
+            new Recipex\AuthBundle\RecipexAuthBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

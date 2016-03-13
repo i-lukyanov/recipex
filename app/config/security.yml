@@ -30,6 +30,21 @@ security:
             stateless: true
             anonymous: true
 
+        login:
+            pattern:  ^/api/v[\d]/auth/login
+            stateless: true
+            anonymous: true
+            form_login:
+                check_path:               /api/v1/auth/login_check
+                success_handler:          lexik_jwt_authentication.handler.authentication_success
+                failure_handler:          lexik_jwt_authentication.handler.authentication_failure
+                require_previous_session: false
+
+        api:
+            pattern:   ^/api
+            stateless: true
+            lexik_jwt: ~
+
         main:
             anonymous: ~
             # activate different ways to authenticate
