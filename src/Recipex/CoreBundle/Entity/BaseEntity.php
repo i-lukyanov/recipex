@@ -4,7 +4,7 @@
  * Date: 11.03.2016
  */
 
-namespace Bankon\ResourceBundle\Entity;
+namespace Recipex\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,7 +22,7 @@ abstract class BaseEntity
      * @var boolean
      * @ORM\Column(type="boolean", options={ "default": true })
      */
-    protected $enabled = true;
+    protected $enabled;
 
     /**
      * @var \DateTime
@@ -36,6 +36,11 @@ abstract class BaseEntity
      */
     protected $updatedAt;
 
+
+    public function __construct()
+    {
+        $this->enabled = true;
+    }
 
     /**
      * @return int
@@ -55,10 +60,12 @@ abstract class BaseEntity
 
     /**
      * @param boolean $enabled
+     * @return $this
      */
     public function setEnabled($enabled)
     {
         $this->enabled = $enabled;
+        return $this;
     }
 
     /**
