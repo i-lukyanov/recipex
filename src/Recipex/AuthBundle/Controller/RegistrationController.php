@@ -2,17 +2,16 @@
 
 namespace Recipex\AuthBundle\Controller;
 
+use Recipex\CoreBundle\Controller\ApiController;
 use Recipex\CoreBundle\Traits\FormErrorsTrait;
 use Recipex\CoreBundle\Utils\ApiProblem;
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\FOSUserEvents;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class RegistrationController extends Controller
+class RegistrationController extends ApiController
 {
     use FormErrorsTrait;
 
@@ -49,19 +48,19 @@ class RegistrationController extends Controller
         $jsonData = json_decode($content, true);
 
         if ($jsonData === null) {
-//            $apiProblem = new ApiProblem(Codes::HTTP_BAD_REQUEST, ApiProblem::TYPE_INVALID_REQUEST_BODY_FORMAT);
-//            $apiProblem->set('errors', ['body' => $translator->trans('invalid_body', [], 'BankonResourceBundle')]);
-//
-//            return $this->handleApiProblemResponse($apiProblem);
+            $apiProblem = new ApiProblem(Response::HTTP_BAD_REQUEST, ApiProblem::TYPE_INVALID_REQUEST_BODY_FORMAT);
+            $apiProblem->set('errors', ['body' => $translator->trans('invalid_body', [], 'RecipexCoreBundle')]);
+
+            return $this->handleApiProblemResponse($apiProblem);
         }
 
         $form->submit($jsonData);
 
         if (!$form->isValid()) {
-//            $apiProblem = new ApiProblem(Codes::HTTP_BAD_REQUEST, ApiProblem::TYPE_VALIDATION_ERROR);
-//            $apiProblem->set('errors', $this->getErrorsFromForm($form));
-//
-//            return $this->handleApiProblemResponse($apiProblem);
+            $apiProblem = new ApiProblem(Response::HTTP_BAD_REQUEST, ApiProblem::TYPE_VALIDATION_ERROR);
+            $apiProblem->set('errors', $this->getErrorsFromForm($form));
+
+            return $this->handleApiProblemResponse($apiProblem);
         }
 
         $event = new FormEvent($form, $request);
@@ -70,8 +69,7 @@ class RegistrationController extends Controller
         $userManager->updateUser($user);
 
         $user_array = $this->container->get('serializer')->normalize($user, 'json', ['groups' => ['list']]);
-        $response = new JsonResponse($user_array, Response::HTTP_CREATED);
 
-        return $response;
+        return $this->handleApiResponse($user_array, Response::HTTP_CREATED);
     }
 }

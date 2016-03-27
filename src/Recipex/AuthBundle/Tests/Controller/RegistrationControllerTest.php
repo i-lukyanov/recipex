@@ -14,22 +14,42 @@ class RegistrationControllerTest extends ApiTestCase
     {
         $requestData = [
             'username' => 'test',
-            'email' => 'test',
+            'email' => 'test@test.te',
             'name' => 'Тест',
             'plainPassword' => [
                 'first' => 'test',
                 'second' => 'test'
             ]
         ];
-        $client = static::createClient();
 
-        $crawler = $client->request('POST', '/api/v1/auth/register', [], [], ['Content-Type' => 'application/json'], json_encode($requestData));
+        $crawler = $this->client->request('POST', '/api/v1/auth/register', [], [], ['Content-Type' => 'application/json'], json_encode($requestData));
+        $response = $this->client->getResponse();
+        $content = json_decode($response->getContent(), true);
 
-        $content = json_decode($client->getResponse()->getContent(), true);
-
-        $this->assertEquals(201, $client->getResponse()->getStatusCode());
+        $this->assertEquals(201, $response->getStatusCode());
         $this->assertArrayHasKey('username', $content);
         $this->assertArrayNotHasKey('password', $content);
         $this->assertEquals('test', $content['username']);
+    }
+
+    public function testRegisterValidationErrors()
+    {
+        $requestData = [
+            'username' => 'test',
+            'name' => 'Тест',
+            'plainPassword' => [
+                'first' => 'test',
+                'second' => 'test'
+            ]
+        ];
+
+        $crawler = $this->client->request('POST', '/api/v1/auth/register', [], [], ['Content-Type' => 'application/json'], json_encode($requestData));
+        $response = $this->client->getResponse();
+        $content = json_decode($response->getContent(), true);
+
+        $this->assertEquals(400, $response->getStatusCode());
+        $this->assertArrayHasKey('errors', $content);
+        $this->assertNotEmpty($content['errors']['email']);
+        $this->assertEquals('application/problem+json', $response->headers->get('Content-Type'));
     }
 }
