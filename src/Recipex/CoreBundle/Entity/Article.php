@@ -67,7 +67,7 @@ class Article extends BaseEntity
 
     /**
      * @var array
-     * @ORM\Column(type="json_array", columnDefinition="JSONB NOT NULL")
+     * @ORM\Column(type="json_array")
      */
     protected $tags;
 
