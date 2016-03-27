@@ -1,6 +1,6 @@
 services:
     recipex_core.api_problem_subscriber:
         class: Recipex\CoreBundle\EventListener\ApiExceptionSubscriber
-        arguments: []
+        arguments: [%kernel.debug%]
         tags:
             - { name: kernel.event_subscriber }

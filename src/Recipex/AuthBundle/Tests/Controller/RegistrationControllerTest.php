@@ -71,4 +71,17 @@ EOF;
         $this->assertNotEmpty($content['errors']['body']);
         $this->assertEquals('application/problem+json', $response->headers->get('Content-Type'));
     }
+
+    public function test404Exception()
+    {
+        $this->client->request('GET', '/api/v1/auth/fake', [], [], ['Content-Type' => 'application/json']);
+        $response = $this->client->getResponse();
+        $content = json_decode($response->getContent(), true);
+
+        $this->assertEquals(404, $response->getStatusCode());
+        $this->assertEquals('application/problem+json', $response->headers->get('Content-Type'));
+        $this->assertEquals('about:blank', $content['type']);
+        $this->assertEquals('Not Found', $content['title']);
+        $this->assertArrayHasKey('detail', $content);
+    }
 }
