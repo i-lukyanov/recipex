@@ -93,4 +93,12 @@ class ApiProblem
     {
         return $this->statusCode;
     }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
 }

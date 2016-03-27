@@ -1,7 +1,11 @@
 recipex_auth:
     resource: "@RecipexAuthBundle/Resources/config/routing.yml"
     prefix:   /api/v1/auth
+    defaults:
+        _format: json
 
 recipex_core:
     resource: "@RecipexCoreBundle/Resources/config/routing.yml"
     prefix:   /api/v1
+    defaults:
+        _format: json

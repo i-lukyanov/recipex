@@ -3,6 +3,7 @@
 namespace Recipex\AuthBundle\Controller;
 
 use Recipex\CoreBundle\Controller\ApiController;
+use Recipex\CoreBundle\Exceptions\ApiProblemException;
 use Recipex\CoreBundle\Traits\FormErrorsTrait;
 use Recipex\CoreBundle\Utils\ApiProblem;
 use FOS\UserBundle\Event\FormEvent;
@@ -51,7 +52,7 @@ class RegistrationController extends ApiController
             $apiProblem = new ApiProblem(Response::HTTP_BAD_REQUEST, ApiProblem::TYPE_INVALID_REQUEST_BODY_FORMAT);
             $apiProblem->set('errors', ['body' => $translator->trans('invalid_body', [], 'RecipexCoreBundle')]);
 
-            return $this->handleApiProblemResponse($apiProblem);
+            throw new ApiProblemException($apiProblem);
         }
 
         $form->submit($jsonData);
@@ -60,7 +61,7 @@ class RegistrationController extends ApiController
             $apiProblem = new ApiProblem(Response::HTTP_BAD_REQUEST, ApiProblem::TYPE_VALIDATION_ERROR);
             $apiProblem->set('errors', $this->getErrorsFromForm($form));
 
-            return $this->handleApiProblemResponse($apiProblem);
+            throw new ApiProblemException($apiProblem);
         }
 
         $event = new FormEvent($form, $request);

@@ -24,7 +24,7 @@ class ApiController extends Controller
         $response = new JsonResponse(
             $content,
             $statusCode,
-            ['Content-Type' => 'application/problem+json']
+            ['Content-Type' => 'application/json']
         );
 
         return $response;

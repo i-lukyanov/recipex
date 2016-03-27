@@ -1,4 +1,6 @@
 services:
-#    recipex_core.example:
-#        class: Recipex\CoreBundle\Example
-#        arguments: ["@service_id", "plain_value", %parameter%]
+    recipex_core.api_problem_subscriber:
+        class: Recipex\CoreBundle\EventListener\ApiExceptionSubscriber
+        arguments: []
+        tags:
+            - { name: kernel.event_subscriber }
