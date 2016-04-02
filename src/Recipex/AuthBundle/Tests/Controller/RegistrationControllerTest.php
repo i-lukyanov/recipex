@@ -57,8 +57,12 @@ class RegistrationControllerTest extends ApiTestCase
     {
         $invalidBody = <<<EOF
 {
-    "avatarNumber" : "2
-    "tagLine": "I'm from a test!"
+    "username": "test"
+    "name": "Тест",
+    "plainPassword": {
+        "first": "test",
+        "second": "test"
+    }
 }
 EOF;
 
