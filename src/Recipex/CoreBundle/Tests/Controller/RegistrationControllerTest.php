@@ -4,7 +4,7 @@
  * Date: 20.03.2016
  */
 
-namespace Recipex\AuthBundle\Tests\Controller;
+namespace Recipex\CoreBundle\Tests\Controller;
 
 use Recipex\CoreBundle\Tests\ApiTestCase;
 

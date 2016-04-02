@@ -1,8 +1,7 @@
 <?php
 
-namespace Recipex\AuthBundle\Controller;
+namespace Recipex\CoreBundle\Controller;
 
-use Recipex\CoreBundle\Controller\ApiController;
 use Recipex\CoreBundle\Exceptions\ApiProblemException;
 use Recipex\CoreBundle\Traits\FormErrorsTrait;
 use Recipex\CoreBundle\Utils\ApiProblem;
@@ -11,7 +10,11 @@ use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\FOSUserEvents;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration as Extra;
 
+/**
+ * @Extra\Route("/auth")
+ */
 class RegistrationController extends ApiController
 {
     use FormErrorsTrait;
@@ -21,6 +24,9 @@ class RegistrationController extends ApiController
      *
      * @param Request $request
      * @return Response
+     *
+     * @Extra\Route("/register", name="api_register")
+     * @Extra\Method({"POST"})
      */
     public function registerAction(Request $request)
     {

@@ -6,7 +6,7 @@
  * Date: 13.03.2016
  */
 
-namespace Recipex\AuthBundle\Form;
+namespace Recipex\CoreBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -25,6 +25,6 @@ class RegistrationType extends AbstractType
 
     public function getBlockPrefix()
     {
-        return 'app_user_registration';
+        return 'recipex_core_user_registration';
     }
 }

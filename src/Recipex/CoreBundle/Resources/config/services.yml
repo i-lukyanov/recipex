@@ -4,3 +4,8 @@ services:
         arguments: [%kernel.debug%]
         tags:
             - { name: kernel.event_subscriber }
+
+    recipex_core.form.registration:
+        class: Recipex\CoreBundle\Form\RegistrationType
+        tags:
+            - { name: form.type, alias: recipex_core_user_registration }

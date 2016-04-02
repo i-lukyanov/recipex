@@ -25,7 +25,6 @@ class AppKernel extends Kernel
 
             // Application bundles
             new Recipex\CoreBundle\RecipexCoreBundle(),
-            new Recipex\AuthBundle\RecipexAuthBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
