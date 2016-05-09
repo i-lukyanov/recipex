@@ -3,6 +3,8 @@
 namespace Recipex\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity()
@@ -22,24 +24,38 @@ class File extends BaseEntity
     /**
      * @var string
      * @ORM\Column(type="string")
+     *
+     * @Groups({ "get", "list", "file_info" })
+     *
+     * @Assert\NotBlank(message="")
+     * @Assert\Length(
+     *     max="255",
+     *     maxMessage="field.max"
+     * )
      */
     protected $name;
 
     /**
      * @var string
      * @ORM\Column(type="string", length=20)
+     *
+     * @Groups({ "file_info" })
      */
     protected $extension;
 
     /**
      * @var int
      * @ORM\Column(type="bigint", options={ "unsigned": true })
+     *
+     * @Groups({ "file_info" })
      */
     protected $size;
 
     /**
      * @var string
      * @ORM\Column(type="string")
+     *
+     * @Groups({ "file_info" })
      */
     protected $path;
 

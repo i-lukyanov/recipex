@@ -3,6 +3,8 @@
 namespace Recipex\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity()
@@ -22,34 +24,81 @@ class Group extends BaseEntity
     /**
      * @var string
      * @ORM\Column(type="string")
+     * @Groups({ "get", "list" })
+     *
+     * @Assert\NotBlank(message="field.not_blank")
+     * @Assert\Length(
+     *     max="100",
+     *     maxMessage="field.max"
+     * )
      */
     protected $name;
 
     /**
      * @var string
      * @ORM\Column(type="string")
+     * 
+     * @Groups({ "get", "list" })
+     *
+     * @Assert\NotBlank(message="field.not_blank")
+     * @Assert\Length(
+     *     max="100",
+     *     maxMessage="field.max"
+     * )
      */
     protected $displayName;
 
     /**
      * @var string
      * @ORM\Column(type="string", nullable=true)
+     *
+     * @Groups({ "get", "list" })
+     *
+     * @Assert\Length(
+     *     max="255",
+     *     maxMessage="field.max"
+     * )
      */
     protected $description;
 
     /**
      * @var string
      * @ORM\Column(type="string", nullable=true)
+     *
+     * @Groups({ "get" })
+     *
+     * @Assert\Regex(
+     *     pattern="/^\#[0-9a-fA-F]{3,6}$/",
+     *     match=true,
+     *     message="color.wrong"
+     * )
      */
     protected $color;
 
     /**
      * @var File
-     * @ORM\ManyToOne(targetEntity="Recipex\CoreBundle\Entity\File")
-     * @ORM\JoinColumn(name="icon_id", referencedColumnName="id", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Recipex\CoreBundle\Entity\File", cascade={ "persist" })
+     * @ORM\JoinColumn(name="image_id", referencedColumnName="id", nullable=true)
+     *
+     * @Groups({ "get" })
+     *
+     * @Assert\Type(type="Recipex\CoreBundle\Entity\File")
+     * @Assert\Valid()
      */
-    protected $icon;
+    protected $image;
 
+    /**
+     * @var boolean
+     * @ORM\Column(type="boolean", options={ "default": true })
+     */
+    protected $deletable;
+
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->deletable = true;
+    }
 
     /**
      * @return string
@@ -126,18 +175,36 @@ class Group extends BaseEntity
     /**
      * @return File
      */
-    public function getIcon()
+    public function getImage()
     {
-        return $this->icon;
+        return $this->image;
     }
 
     /**
-     * @param File $icon
+     * @param File $image
      * @return Group
      */
-    public function setIcon($icon)
+    public function setImage($image)
     {
-        $this->icon = $icon;
+        $this->image = $image;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isDeletable()
+    {
+        return $this->deletable;
+    }
+
+    /**
+     * @param boolean $deletable
+     * @return Group
+     */
+    public function setDeletable($deletable)
+    {
+        $this->deletable = $deletable;
         return $this;
     }
 }
