@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Recipex\CoreBundle\Repository\GroupRepository")
  * @ORM\Table(name="groups")
  * @ORM\HasLifecycleCallbacks()
  */
@@ -24,6 +24,7 @@ class Group extends BaseEntity
     /**
      * @var string
      * @ORM\Column(type="string", unique=true)
+     * 
      * @Groups({ "get", "list" })
      *
      * @Assert\NotBlank(message="field.not_blank")

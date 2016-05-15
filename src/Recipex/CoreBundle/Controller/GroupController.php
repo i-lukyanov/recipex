@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration as Extra;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @Extra\Route("/groups")
@@ -23,19 +24,18 @@ class GroupController extends ApiController
      * Создание группы
      *
      * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     * @throws ApiProblemException
      *
      * @Extra\Route("", name="api_group_create")
      * @Extra\Method("POST")
-     * 
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     * @throws ApiProblemException
      */
     public function createAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
         $data = $request->request->all();
-        $data['name'] = str_replace(' ', '_', strtolower(\transliterate_ru($data['displayName'])));
+        $data['name'] = str_replace(' ', '-', strtolower(\transliterate_ru($data['displayName'])));
         /** @var UploadedFile $image */
         $image = $request->files->get('image');
         if (empty($image)) {
@@ -73,16 +73,36 @@ class GroupController extends ApiController
     /**
      * Просмотр списка групп
      *
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     *
      * @Extra\Route("", name="api_group_list")
      * @Extra\Method("GET")
-     *
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     * @throws ApiProblemException
      */
     public function listAction()
     {
         $groups = $this->getDoctrine()->getRepository('RecipexCoreBundle:Group')->findAll();
         $group_array = $this->container->get('serializer')->normalize($groups, 'json', ['groups' => ['list']]);
+
+        return $this->handleApiResponse($group_array, Response::HTTP_OK);
+    }
+
+    /**
+     * Просмотр группы
+     *
+     * @param $name
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     *
+     * @Extra\Route("/{name}", name="api_group_show")
+     * @Extra\Method("GET")
+     */
+    public function showAction($name)
+    {
+        $group = $this->getDoctrine()->getRepository('RecipexCoreBundle:Group')->findOneByName($name);
+        if ($group === null) {
+            throw new NotFoundHttpException(sprintf('No group found for name "%s"', $name));
+        }
+
+        $group_array = $this->container->get('serializer')->normalize($group, 'json', ['groups' => ['get']]);
 
         return $this->handleApiResponse($group_array, Response::HTTP_OK);
     }
