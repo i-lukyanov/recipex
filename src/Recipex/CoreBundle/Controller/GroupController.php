@@ -20,6 +20,8 @@ class GroupController extends ApiController
     use FormErrorsTrait;
 
     /**
+     * Создание группы
+     *
      * @param Request $request
      *
      * @Extra\Route("", name="api_group_create")
@@ -66,5 +68,22 @@ class GroupController extends ApiController
         $group_array = $this->container->get('serializer')->normalize($group, 'json', ['groups' => ['get']]);
 
         return $this->handleApiResponse($group_array, Response::HTTP_CREATED);
+    }
+
+    /**
+     * Просмотр списка групп
+     *
+     * @Extra\Route("", name="api_group_list")
+     * @Extra\Method("GET")
+     *
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     * @throws ApiProblemException
+     */
+    public function listAction()
+    {
+        $groups = $this->getDoctrine()->getRepository('RecipexCoreBundle:Group')->findAll();
+        $group_array = $this->container->get('serializer')->normalize($groups, 'json', ['groups' => ['list']]);
+
+        return $this->handleApiResponse($group_array, Response::HTTP_OK);
     }
 }

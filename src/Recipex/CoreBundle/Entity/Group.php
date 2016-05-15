@@ -23,7 +23,7 @@ class Group extends BaseEntity
 
     /**
      * @var string
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", unique=true)
      * @Groups({ "get", "list" })
      *
      * @Assert\NotBlank(message="field.not_blank")
