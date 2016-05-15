@@ -80,7 +80,7 @@ class Group extends BaseEntity
      * @ORM\ManyToOne(targetEntity="Recipex\CoreBundle\Entity\File", cascade={ "persist" })
      * @ORM\JoinColumn(name="image_id", referencedColumnName="id", nullable=true)
      *
-     * @Groups({ "get" })
+     * @Groups({ "get", "list" })
      *
      * @Assert\Type(type="Recipex\CoreBundle\Entity\File")
      * @Assert\Valid()

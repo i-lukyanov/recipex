@@ -26,13 +26,13 @@ abstract class BaseEntity
 
     /**
      * @var \DateTime
-     * @ORM\Column(type="datetimetz")
+     * @ORM\Column(type="datetime")
      */
     protected $createdAt;
 
     /**
      * @var \DateTime
-     * @ORM\Column(type="datetimetz", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updatedAt;
 

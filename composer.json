@@ -9,6 +9,9 @@
         "classmap": [
             "app/AppKernel.php",
             "app/AppCache.php"
+        ],
+        "files": [
+            "src/Recipex/CoreBundle/Utils/helpers.php"
         ]
     },
     "autoload-dev": {

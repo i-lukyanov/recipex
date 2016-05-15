@@ -22,15 +22,18 @@ class GroupController extends ApiController
     /**
      * @param Request $request
      *
-     * @throws ApiProblemException
      * @Extra\Route("", name="api_group_create")
      * @Extra\Method("POST")
+     * 
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     * @throws ApiProblemException
      */
     public function createAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
         $data = $request->request->all();
+        $data['name'] = str_replace(' ', '_', strtolower(\transliterate_ru($data['displayName'])));
         /** @var UploadedFile $image */
         $image = $request->files->get('image');
         if (empty($image)) {
