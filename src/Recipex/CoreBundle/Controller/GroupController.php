@@ -106,4 +106,27 @@ class GroupController extends ApiController
 
         return $this->handleApiResponse($group_array, Response::HTTP_OK);
     }
+
+    /**
+     * Удаление группы
+     *
+     * @param $name
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     *
+     * @Extra\Route("/{name}", name="api_group_delete")
+     * @Extra\Method("DELETE")
+     */
+    public function deleteAction($name)
+    {
+        $group = $this->getDoctrine()->getRepository('RecipexCoreBundle:Group')->findOneByName($name);
+        if ($group === null) {
+            throw new NotFoundHttpException(sprintf('No group found for name "%s"', $name));
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($group);
+        $em->flush();
+
+        return $this->handleApiResponse(null, Response::HTTP_NO_CONTENT);
+    }
 }
