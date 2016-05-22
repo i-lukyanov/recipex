@@ -34,7 +34,8 @@
         "friendsofsymfony/http-cache-bundle": "~1.0",
         "nelmio/api-doc-bundle": "^2.11",
         "symfony/security-acl": "~3.0",
-        "lexik/jwt-authentication-bundle": "~1.4"
+        "lexik/jwt-authentication-bundle": "~1.4",
+        "guzzlehttp/guzzle": "^6.2"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

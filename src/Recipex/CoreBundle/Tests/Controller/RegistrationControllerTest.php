@@ -22,9 +22,8 @@ class RegistrationControllerTest extends ApiTestCase
             ]
         ];
 
-        $this->client->request('POST', '/api/v1/auth/register', [], [], ['Content-Type' => 'application/json'], json_encode($requestData));
-        $response = $this->client->getResponse();
-        $content = json_decode($response->getContent(), true);
+        $response = $this->client->request('POST', 'auth/register', ['json' => $requestData]);
+        $content = json_decode($response->getBody()->getContents(), true);
 
         $this->assertEquals(201, $response->getStatusCode());
         $this->assertArrayHasKey('username', $content);
@@ -43,14 +42,13 @@ class RegistrationControllerTest extends ApiTestCase
             ]
         ];
 
-        $this->client->request('POST', '/api/v1/auth/register', [], [], ['Content-Type' => 'application/json'], json_encode($requestData));
-        $response = $this->client->getResponse();
-        $content = json_decode($response->getContent(), true);
+        $response = $this->client->request('POST', 'auth/register', ['json' => $requestData]);
+        $content = json_decode($response->getBody()->getContents(), true);
 
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertArrayHasKey('errors', $content);
         $this->assertNotEmpty($content['errors']['email']);
-        $this->assertEquals('application/problem+json', $response->headers->get('Content-Type'));
+        $this->assertEquals('application/problem+json', $response->getHeader('Content-Type')[0]);
     }
 
     public function testRegisterInvalidJson()
@@ -66,24 +64,22 @@ class RegistrationControllerTest extends ApiTestCase
 }
 EOF;
 
-        $this->client->request('POST', '/api/v1/auth/register', [], [], ['Content-Type' => 'application/json'], $invalidBody);
-        $response = $this->client->getResponse();
-        $content = json_decode($response->getContent(), true);
+        $response = $this->client->request('POST', 'auth/register', ['body' => $invalidBody]);
+        $content = json_decode($response->getBody()->getContents(), true);
 
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertArrayHasKey('errors', $content);
-        $this->assertNotEmpty($content['errors']['body']);
-        $this->assertEquals('application/problem+json', $response->headers->get('Content-Type'));
+        $this->assertArrayHasKey('body', $content['errors']);
+        $this->assertEquals('application/problem+json', $response->getHeader('Content-Type')[0]);
     }
 
     public function test404Exception()
     {
-        $this->client->request('GET', '/api/v1/auth/fake', [], [], ['Content-Type' => 'application/json']);
-        $response = $this->client->getResponse();
-        $content = json_decode($response->getContent(), true);
+        $response = $this->client->request('POST', 'auth/fake', []);
+        $content = json_decode($response->getBody()->getContents(), true);
 
         $this->assertEquals(404, $response->getStatusCode());
-        $this->assertEquals('application/problem+json', $response->headers->get('Content-Type'));
+        $this->assertEquals('application/problem+json', $response->getHeader('Content-Type')[0]);
         $this->assertEquals('about:blank', $content['type']);
         $this->assertEquals('Not Found', $content['title']);
         $this->assertArrayHasKey('detail', $content);

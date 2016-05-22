@@ -8,13 +8,15 @@ namespace Recipex\CoreBundle\Tests;
 
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManager;
+use GuzzleHttp\Client;
 use Recipex\CoreBundle\Entity\User;
-use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class ApiTestCase extends WebTestCase
 {
     private static $staticClient;
+
+    protected static $baseUri;
 
     /**
      * @var Client Веб-клиент
@@ -25,10 +27,11 @@ class ApiTestCase extends WebTestCase
     {
         parent::setUpBeforeClass();
         static::bootKernel();
-        self::$staticClient = static::createClient();
+        self::$baseUri = 'http://localhost:8000/api/v1/';
+        self::$staticClient = new Client(['base_uri' =>  self::$baseUri, 'exceptions' => false]);
     }
     
-    public function setUp()
+    protected function setUp()
     {
         $this->purgeDatabase();
         $this->client = self::$staticClient;
@@ -54,6 +57,7 @@ class ApiTestCase extends WebTestCase
     {
         $user = new User();
         $user->setUsername($username);
+        $user->setName($username);
         $user->setEmail($username.'@test.te');
         $password = $this->getService('security.password_encoder')->encodePassword($user, $plainPassword);
         $user->setPassword($password);
