@@ -22,7 +22,7 @@ class RegistrationControllerTest extends ApiTestCase
             ]
         ];
 
-        $response = $this->client->request('POST', 'auth/register', ['json' => $requestData]);
+        $response = $this->client->request('POST', 'api/v1/auth/register', ['json' => $requestData]);
         $content = json_decode($response->getBody()->getContents(), true);
 
         $this->assertEquals(201, $response->getStatusCode());
@@ -42,7 +42,7 @@ class RegistrationControllerTest extends ApiTestCase
             ]
         ];
 
-        $response = $this->client->request('POST', 'auth/register', ['json' => $requestData]);
+        $response = $this->client->request('POST', 'api/v1/auth/register', ['json' => $requestData]);
         $content = json_decode($response->getBody()->getContents(), true);
 
         $this->assertEquals(400, $response->getStatusCode());
@@ -64,7 +64,7 @@ class RegistrationControllerTest extends ApiTestCase
 }
 EOF;
 
-        $response = $this->client->request('POST', 'auth/register', ['body' => $invalidBody]);
+        $response = $this->client->request('POST', 'api/v1/auth/register', ['body' => $invalidBody]);
         $content = json_decode($response->getBody()->getContents(), true);
 
         $this->assertEquals(400, $response->getStatusCode());
@@ -75,7 +75,7 @@ EOF;
 
     public function test404Exception()
     {
-        $response = $this->client->request('POST', 'auth/fake', []);
+        $response = $this->client->request('POST', 'api/v1/auth/fake', []);
         $content = json_decode($response->getBody()->getContents(), true);
 
         $this->assertEquals(404, $response->getStatusCode());

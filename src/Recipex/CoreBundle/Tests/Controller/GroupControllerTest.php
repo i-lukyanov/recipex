@@ -18,7 +18,7 @@ class GroupControllerTest extends ApiTestCase
         $this->createUser($login, $plainPassword);
 
         $requestData = ['_username' => $login, '_password' => $plainPassword];
-        $response = $this->client->request('POST', 'auth/login_check', ['form_params' => $requestData]);
+        $response = $this->client->request('POST', 'api/v1/auth/login_check', ['form_params' => $requestData]);
         $content = json_decode($response->getBody()->getContents(), true);
         $this->authToken = $content['token'];
     }
@@ -30,12 +30,12 @@ class GroupControllerTest extends ApiTestCase
             ['name' => 'displayName', 'contents' => $displayName],
             ['name' => 'color', 'contents' => '#123455'],
             ['name' => 'description', 'contents' => 'Группа для проверки'],
-            ['name' => 'image', 'contents' => fopen('d:\#Downloads\settings\tor_logo.png', 'r')],
+            ['name' => 'image', 'contents' => fopen('/home/dezzmond/Downloads/dblcmd_logo.png', 'r')],
         ];
 
         $response = $this->client->request(
             'POST',
-            'groups',
+            'api/v1/groups',
             [
                 'headers' => ['Authorization' => 'Bearer ' . $this->authToken],
                 'multipart' => $groupData,
