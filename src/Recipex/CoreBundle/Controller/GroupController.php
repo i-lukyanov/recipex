@@ -108,6 +108,59 @@ class GroupController extends ApiController
     }
 
     /**
+     * Редактирование группы
+     *
+     * @param Request $request
+     * @param $name
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     *
+     * @Extra\Route("/{name}", name="api_group_update")
+     * @Extra\Method({"PUT", "PATCH"})
+     */
+    public function updateAction(Request $request, $name)
+    {
+        $group = $this->getDoctrine()->getRepository('RecipexCoreBundle:Group')->findOneByName($name);
+        if ($group === null) {
+            throw new NotFoundHttpException(sprintf('No group found for name "%s"', $name));
+        }
+
+        $em = $this->getDoctrine()->getManager();
+
+        $data = $request->request->all();
+        /** @var UploadedFile $image */
+        $image = $request->files->get('image');
+        if (empty($image)) {
+            $apiProblem = new ApiProblem(Response::HTTP_BAD_REQUEST, ApiProblem::TYPE_VALIDATION_ERROR);
+            $apiProblem->set('errors', ['image' => [$this->get('translator')->trans('file_missing', [], 'RecipexCoreBundle')]]);
+
+            throw new ApiProblemException($apiProblem);
+        }
+
+        $data['image']['name'] = $group->getName() . '_logo.' . $image->getClientOriginalExtension();
+        $data['image']['path'] = realpath($this->getParameter('web_images_path')) . DIRECTORY_SEPARATOR . $data['image']['name'];
+        $data['image']['extension'] = $image->getClientOriginalExtension();
+        $data['image']['size'] = $image->getClientSize();
+
+        $form = $this->createForm(GroupType::class, $group);
+        $form->submit($data);
+        if (!$form->isValid()) {
+            $apiProblem = new ApiProblem(Response::HTTP_BAD_REQUEST, ApiProblem::TYPE_VALIDATION_ERROR);
+            $apiProblem->set('errors', $this->getErrorsFromForm($form));
+
+            throw new ApiProblemException($apiProblem);
+        }
+
+        $em->persist($group);
+        $em->flush();
+
+        $image->move(realpath($this->getParameter('web_images_path')), $data['image']['name']);
+
+        $group_array = $this->container->get('serializer')->normalize($group, 'json', ['groups' => ['get']]);
+
+        return $this->handleApiResponse($group_array, Response::HTTP_OK);
+    }
+
+    /**
      * Удаление группы
      *
      * @param $name

@@ -27,7 +27,7 @@ class ApiTestCase extends WebTestCase
     {
         parent::setUpBeforeClass();
         static::bootKernel();
-        self::$baseUri = 'http://localhost:8000/api/v1/';
+        self::$baseUri = getenv('TEST_BASE_URL');
         self::$staticClient = new Client(['base_uri' =>  self::$baseUri, 'exceptions' => false]);
     }
     
