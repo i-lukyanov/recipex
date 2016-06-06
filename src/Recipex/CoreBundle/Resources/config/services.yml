@@ -1,7 +1,7 @@
 services:
     recipex_core.api_problem_subscriber:
         class: Recipex\CoreBundle\EventListener\ApiExceptionSubscriber
-        arguments: [%kernel.debug%]
+        arguments: ["%kernel.debug%", "@recipex_core.response_factory"]
         tags:
             - { name: kernel.event_subscriber }
 
@@ -9,3 +9,10 @@ services:
         class: Recipex\CoreBundle\Form\RegistrationType
         tags:
             - { name: form.type, alias: recipex_core_user_registration }
+
+    recipex_core.response_factory:
+            class: Recipex\CoreBundle\Utils\ApiResponseFactory
+
+    recipex_core.handler.authentication_failure:
+        class: Recipex\CoreBundle\Utils\ApiAuthenticationFailureHandler
+        arguments: ["@recipex_core.response_factory"]

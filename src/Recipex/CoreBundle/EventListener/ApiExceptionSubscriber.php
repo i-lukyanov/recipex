@@ -8,9 +8,9 @@ namespace Recipex\CoreBundle\EventListener;
 
 use Recipex\CoreBundle\Exceptions\ApiProblemException;
 use Recipex\CoreBundle\Utils\ApiProblem;
+use Recipex\CoreBundle\Utils\ApiResponseFactory;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -19,9 +19,13 @@ class ApiExceptionSubscriber implements EventSubscriberInterface
 {
     private $debug;
 
-    public function __construct($debug)
+    private $responseFactory;
+
+
+    public function __construct($debug, ApiResponseFactory $responseFactory)
     {
         $this->debug = $debug;
+        $this->responseFactory = $responseFactory;
     }
 
     public function onKernelException(GetResponseForExceptionEvent $event)
@@ -43,11 +47,7 @@ class ApiExceptionSubscriber implements EventSubscriberInterface
             }
         }
 
-        $response = new JsonResponse(
-            $apiProblem->toArray(),
-            $apiProblem->getStatusCode(),
-            ['Content-Type' => 'application/problem+json']
-        );
+        $response = $this->responseFactory->createResponse($apiProblem);
 
         $event->setResponse($response);
     }
