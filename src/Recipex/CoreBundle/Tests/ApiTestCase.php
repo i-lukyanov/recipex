@@ -9,6 +9,7 @@ namespace Recipex\CoreBundle\Tests;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManager;
 use GuzzleHttp\Client;
+use Recipex\CoreBundle\Entity\Group;
 use Recipex\CoreBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -66,6 +67,25 @@ class ApiTestCase extends WebTestCase
         $this->getEntityManager()->flush();
 
         return $user;
+    }
+
+    /**
+     * Создание группы перед тестом
+     *
+     * @param string $name Название по русски
+     * @param $color
+     * @return User
+     */
+    protected function createGroup($name, $color)
+    {
+        $group = new Group();
+        $group->setDisplayName($name);
+        $group->setName(transliterate_ru($group->getDisplayName()));
+        $group->setColor($color);
+        $this->getEntityManager()->persist($group);
+        $this->getEntityManager()->flush();
+
+        return $group;
     }
 
     /**

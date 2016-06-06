@@ -27,7 +27,7 @@ class Group extends BaseEntity
      * 
      * @Groups({ "get", "list" })
      *
-     * @Assert\NotBlank(message="field.not_blank")
+     * @Assert\NotBlank(message="field.not_blank", groups={ "create" })
      * @Assert\Length(
      *     max="100",
      *     maxMessage="field.max"
@@ -41,7 +41,7 @@ class Group extends BaseEntity
      * 
      * @Groups({ "get", "list" })
      *
-     * @Assert\NotBlank(message="field.not_blank")
+     * @Assert\NotBlank(message="field.not_blank", groups={ "create" })
      * @Assert\Length(
      *     max="100",
      *     maxMessage="field.max"

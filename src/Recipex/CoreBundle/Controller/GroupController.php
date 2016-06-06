@@ -4,6 +4,7 @@ namespace Recipex\CoreBundle\Controller;
 
 use Recipex\CoreBundle\Entity\Group;
 use Recipex\CoreBundle\Exceptions\ApiProblemException;
+use Recipex\CoreBundle\Form\GroupCreateType;
 use Recipex\CoreBundle\Form\GroupType;
 use Recipex\CoreBundle\Traits\FormErrorsTrait;
 use Recipex\CoreBundle\Utils\ApiProblem;
@@ -51,7 +52,7 @@ class GroupController extends ApiController
         $data['image']['size'] = $image->getClientSize();
 
         $group = new Group();
-        $form = $this->createForm(GroupType::class, $group);
+        $form = $this->createForm(GroupCreateType::class, $group);
         $form->submit($data);
         if (!$form->isValid()) {
             $apiProblem = new ApiProblem(Response::HTTP_BAD_REQUEST, ApiProblem::TYPE_VALIDATION_ERROR);
@@ -128,18 +129,18 @@ class GroupController extends ApiController
 
         $data = $request->request->all();
         /** @var UploadedFile $image */
-        $image = $request->files->get('image');
-        if (empty($image)) {
-            $apiProblem = new ApiProblem(Response::HTTP_BAD_REQUEST, ApiProblem::TYPE_VALIDATION_ERROR);
-            $apiProblem->set('errors', ['image' => [$this->get('translator')->trans('file_missing', [], 'RecipexCoreBundle')]]);
-
-            throw new ApiProblemException($apiProblem);
-        }
-
-        $data['image']['name'] = $group->getName() . '_logo.' . $image->getClientOriginalExtension();
-        $data['image']['path'] = realpath($this->getParameter('web_images_path')) . DIRECTORY_SEPARATOR . $data['image']['name'];
-        $data['image']['extension'] = $image->getClientOriginalExtension();
-        $data['image']['size'] = $image->getClientSize();
+//        $image = $request->files->get('image');
+//        if (empty($image)) {
+//            $apiProblem = new ApiProblem(Response::HTTP_BAD_REQUEST, ApiProblem::TYPE_VALIDATION_ERROR);
+//            $apiProblem->set('errors', ['image' => [$this->get('translator')->trans('file_missing', [], 'RecipexCoreBundle')]]);
+//
+//            throw new ApiProblemException($apiProblem);
+//        }
+//
+//        $data['image']['name'] = $group->getName() . '_logo.' . $image->getClientOriginalExtension();
+//        $data['image']['path'] = realpath($this->getParameter('web_images_path')) . DIRECTORY_SEPARATOR . $data['image']['name'];
+//        $data['image']['extension'] = $image->getClientOriginalExtension();
+//        $data['image']['size'] = $image->getClientSize();
 
         $form = $this->createForm(GroupType::class, $group);
         $form->submit($data);
@@ -153,7 +154,7 @@ class GroupController extends ApiController
         $em->persist($group);
         $em->flush();
 
-        $image->move(realpath($this->getParameter('web_images_path')), $data['image']['name']);
+//        $image->move(realpath($this->getParameter('web_images_path')), $data['image']['name']);
 
         $group_array = $this->container->get('serializer')->normalize($group, 'json', ['groups' => ['get']]);
 
