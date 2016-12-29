@@ -1,0 +1,27 @@
+version: '2'
+
+services:
+  recipex-web-app:
+    container_name: recipex-web-app
+    environment:
+      - ENVIRONMENT=development
+    build: .
+    volumes:
+      - ./:/var/www
+    ports:
+      - 80:80
+      - 443:443
+    command: "./tools/docker_volumes_permissions_fix.sh"
+    links:
+      - recipex-postgresql
+    depends_on:
+      - "recipex-postgresql"
+
+  recipex-postgresql:
+    container_name: recipex-postgresql
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=recipexPass
+      - POSTGRES_DB=recipex
+    ports:
+      - 5432:5432
