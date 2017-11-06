@@ -8,6 +8,7 @@ CMD ["/sbin/my_init"]
 # installing packages
 RUN add-apt-repository -y ppa:ondrej/php \
     && add-apt-repository -y ppa:nginx/stable \
+    && DEBIAN_FRONTEND="noninteractive" apt-get update \
     && DEBIAN_FRONTEND="noninteractive" apt-get install -y --force-yes \
         wget \
         curl \
@@ -28,7 +29,7 @@ RUN add-apt-repository -y ppa:ondrej/php \
         php7.0-zip \
         jq \
         unzip \
-        nginx \
+        nginx
 
 
 # misc commands and configs
@@ -49,10 +50,8 @@ COPY server/pool.d/x-custom.conf /etc/php/7.0/fpm/pool.d/x-custom.conf
 COPY server/nginx.sh  /etc/service/nginx/run
 COPY server/phpfpm.sh /etc/service/phpfpm/run
 COPY server/ssl/* /etc/nginx/ssl/
-COPY server/wait-for-it.sh /usr/local/bin/
 
 # startup scripts
-COPY ./scripts/01_get-configs.sh /etc/my_init.d/01_get-configs.sh
 COPY ./scripts/02_enable-xdebug-if-dev.sh /etc/my_init.d/02_enable-xdebug-if-dev.sh
 
 WORKDIR /var/www
