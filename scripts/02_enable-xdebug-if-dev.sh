@@ -1,5 +1,5 @@
 #!/bin/bash
-if [ "$ENVIRONMENT" == "development" ]; then
+if [ "$ENVIRONMENT" == "dev" ]; then
     cp /var/www/server/conf.d/20-xdebug.ini /etc/php/7.0/fpm/conf.d/
     cp /var/www/server/conf.d/20-xdebug.ini /etc/php/7.0/cli/conf.d/
 else

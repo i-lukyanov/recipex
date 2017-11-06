@@ -1,4 +1,4 @@
-FROM phusion/baseimage:latest
+FROM phusion/baseimage:0.9.19
 
 ENV LANG       en_US.UTF-8
 ENV LC_ALL     en_US.UTF-8
@@ -28,7 +28,8 @@ RUN add-apt-repository -y ppa:ondrej/php \
         php7.0-zip \
         jq \
         unzip \
-        nginx
+        nginx \
+
 
 # misc commands and configs
 RUN sed -i "s:.*date.timezone =.*:date.timezone = Europe/Moscow:" /etc/php/7.0/fpm/php.ini \
@@ -52,7 +53,7 @@ COPY server/wait-for-it.sh /usr/local/bin/
 
 # startup scripts
 COPY ./scripts/01_get-configs.sh /etc/my_init.d/01_get-configs.sh
-COPY ./scripts/04_enable-xdebug-if-dev.sh /etc/my_init.d/04_enable-xdebug-if-dev.sh
+COPY ./scripts/02_enable-xdebug-if-dev.sh /etc/my_init.d/02_enable-xdebug-if-dev.sh
 
 WORKDIR /var/www
 ADD . .
